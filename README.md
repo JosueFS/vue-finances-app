@@ -1,4 +1,4 @@
-# Beer Store
+# Vue Finances App
 
 _Beer is much better than a lot of people_ 🍻
 
