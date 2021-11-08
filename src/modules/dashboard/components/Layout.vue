@@ -2,6 +2,14 @@
   <div>
     <Toolbar v-model="drawer" />
     <Menu v-model="drawer" />
+
+    <v-container grid-list-md>
+      <v-layout>
+        <v-flex xs12>
+          <slot />
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 

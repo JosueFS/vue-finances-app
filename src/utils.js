@@ -1,3 +1,15 @@
+const currencyFormater = (
+  { locale, currency } = {
+    locale: 'pt-BR',
+    currency: 'BRL',
+  }
+) => {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+  });
+};
+
 const errorHandler = (error, vm, info) => {
   console.log(`Vue [error handler]: `, error, info);
 
@@ -22,4 +34,15 @@ const formatError = (message) => {
   return messageSplit[messageSplit.length - 1].trim();
 };
 
-export { errorHandler, formatError };
+const groupBy = (array, key, makeCurrentKey) => {
+  return array.reduce((accumulator, item) => {
+    const currentKey = makeCurrentKey(item, key);
+
+    return {
+      ...accumulator,
+      [currentKey]: [...(accumulator[currentKey] || []), item],
+    };
+  }, {});
+};
+
+export { currencyFormater, errorHandler, formatError, groupBy };
