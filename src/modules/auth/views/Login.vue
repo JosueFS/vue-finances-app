@@ -6,6 +6,8 @@
           <v-toolbar class="elevation-0">
             <v-toolbar-title>{{ texts.toolbar }}</v-toolbar-title>
             <v-spacer></v-spacer>
+
+            <!-- <v-spacer></v-spacer> -->
             <v-switch
               align-center
               v-model="$vuetify.theme.dark"
@@ -58,10 +60,21 @@
               block
               depressed
               color="primary"
-              :disabled="$v.$invalid"
+              :disabled="$v.$invalid || isLoading"
               @click="submit"
-              >{{ texts.button }}</v-btn
             >
+              <template v-if="!isLoading">
+                {{ texts.button }}
+              </template>
+              <template v-else>
+                <v-progress-circular
+                  indeterminate
+                  color="white"
+                  width="3"
+                  size="25"
+                ></v-progress-circular>
+              </template>
+            </v-btn>
           </v-card-text>
 
           <v-card-actions class="justify-center">
@@ -69,6 +82,26 @@
               {{ texts.link }}
             </a>
           </v-card-actions>
+
+          <v-snackbar
+            v-model="showSnackbar"
+            timeout="60000"
+            width="fit-content"
+            min-width="300px"
+            max-width="100%"
+          >
+            {{ error }}
+            <template v-slot:action="{ attrs }">
+              <v-btn
+                color="pink"
+                text
+                v-bind="attrs"
+                @click="showSnackbar = false"
+              >
+                Fechar
+              </v-btn>
+            </template>
+          </v-snackbar>
         </v-card>
       </v-flex>
     </v-layout>
@@ -77,11 +110,16 @@
 
 <script>
 import { required, email, minLength } from 'vuelidate/lib/validators';
+import AuthService from './../services/auth.service';
+import { formatError } from '@/utils';
 
 export default {
   name: 'Login',
   data: () => ({
+    error: undefined,
     isLogin: true,
+    isLoading: false,
+    showSnackbar: false,
     user: {
       name: '',
       email: '',
@@ -169,8 +207,21 @@ export default {
     log() {
       console.log('Vuelidate: ', this.$v);
     },
-    submit() {
-      console.log('User: ', this.user);
+    async submit() {
+      this.isLoading = true;
+      try {
+        this.isLogin
+          ? await AuthService.login(this.user)
+          : await AuthService.signup(this.user);
+
+        this.$router.push(this.$route.query.redirect || '/dashboard');
+      } catch (error) {
+        console.log(error);
+        this.error = formatError(error.message);
+        this.showSnackbar = true;
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };
