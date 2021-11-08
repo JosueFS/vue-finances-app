@@ -154,9 +154,6 @@ export default {
   },
   computed: {
     texts() {
-      console.log('Vuelidate: ', this.$v);
-      console.log('Data: ', this.user);
-
       return this.isLogin
         ? {
             toolbar: 'Entrar',
@@ -171,7 +168,6 @@ export default {
     },
     nameErrors() {
       const errors = [];
-      console.log(this.$v);
       const name = this.$v.user.name;
       if (!name.$dirty) return errors;
 
@@ -204,9 +200,6 @@ export default {
     },
   },
   methods: {
-    log() {
-      console.log('Vuelidate: ', this.$v);
-    },
     async submit() {
       this.isLoading = true;
       try {

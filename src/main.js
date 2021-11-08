@@ -9,6 +9,7 @@ import router from '@/router';
 import store from '@/store';
 
 import vuetify from '@/plugins/vuetify';
+import { errorHandler } from './utils';
 
 const requireComponent = require.context(
   './components',
@@ -27,6 +28,7 @@ requireComponent.keys().forEach((fileName) => {
 });
 
 Vue.config.productionTip = false;
+Vue.config.errorHandler = errorHandler;
 
 new Vue({
   vuetify,

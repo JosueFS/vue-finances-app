@@ -1,9 +1,16 @@
 <template>
-  <h1>Dashboard</h1>
+  <Layout />
 </template>
 
 <script>
-export default {};
+import Layout from '../components/Layout.vue';
+
+export default {
+  name: 'Dashboard',
+  components: {
+    Layout,
+  },
+};
 </script>
 
 <style></style>
